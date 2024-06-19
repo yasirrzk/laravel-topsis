@@ -1,10 +1,10 @@
 @extends('layouts.app')
   
-@section('title', 'Home Product')
+@section('title', 'Table SubKriteria')
   
 @section('contents')
     <div class="d-flex align-items-center justify-content-between">
-        <h1 class="mb-0">List Product</h1>
+        <h1 class="mb-0">List SubKriteria</h1>
         <a href="{{ route('products.create') }}" class="btn btn-primary">Add Product</a>
     </div>
     <hr />

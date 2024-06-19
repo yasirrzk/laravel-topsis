@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
+
+Route::get('/about', function(){
+    return view('about');
+})->name('about');
+
+// Route::get('/home', function(){
+//     return view('home');
+// })->name('home');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('register', 'register')->name('register');
@@ -47,6 +60,14 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(AlternatifController::class)->prefix('alternatifs')->group(function () {
         Route::get('', 'index')->name('alternatif');
+        Route::get('create', 'create')->name('alternatif.create');
+        Route::post('store', 'store')->name('alternatif.store');
+    });
+
+    Route::controller(KriteriaController::class)->prefix('kriterias')->group(function () {
+        Route::get('', 'index')->name('kriteria');
+        Route::get('create', 'create')->name('kriteria.create');
+        Route::post('store', 'store')->name('kriteria.store');
     });
     
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile'])->name('profile');

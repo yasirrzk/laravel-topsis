@@ -5,12 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Alternatif extends Model
+class Kriteria extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'code_alternatif',
+        'code_kriteria',
         'nama',
-        'alamat'
+        'weight',
+        'type'
       ];
+    
+      public function subKriterias()
+      {
+          return $this->hasMany(SubKriteria::class);
+      }
 }

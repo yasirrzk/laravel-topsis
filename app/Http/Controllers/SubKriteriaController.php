@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Alternatif;
 use Illuminate\Http\Request;
 
-class AlternatifController extends Controller
+class SubKriteriaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $alternatif = Alternatif::orderBy('created_at', 'DESC')->get();
-
-        return view('alternatif.index', compact('alternatif'));
+        //
     }
 
     /**
@@ -22,7 +19,7 @@ class AlternatifController extends Controller
      */
     public function create()
     {
-        return view('alternatif.create');
+        //
     }
 
     /**
@@ -30,9 +27,7 @@ class AlternatifController extends Controller
      */
     public function store(Request $request)
     {
-        Alternatif::create($request->all());
-
-        return redirect()->route('alternatif')->with('success', 'Product added succesfully');
+        //
     }
 
     /**
@@ -40,9 +35,7 @@ class AlternatifController extends Controller
      */
     public function show(string $id)
     {
-        $alternatif = Alternatif::findOrFail($id);
-
-        return view('alternatif.show', compact('alternatif'));
+        //
     }
 
     /**

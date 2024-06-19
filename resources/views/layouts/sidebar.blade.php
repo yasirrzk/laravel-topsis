@@ -1,9 +1,9 @@
-<ul class="navbar-nav bg-gray-800 sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav sidebar sidebar-dark accordion" style="background-color: #5C5470" id="accordionSidebar">
   
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
       <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fas fa-smile-beam"></i>
+        <i class="fas fa-grin-tongue-wink"></i>
       </div>
       <div class="sidebar-brand-text mx-3">Topsis</div>
     </a>
@@ -14,7 +14,7 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
       <a class="nav-link" href="{{ route('dashboard') }}">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <i class="fas fa-th-large"></i>
         <span>Dashboard</span></a>
     </li>
 
@@ -23,16 +23,29 @@
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Alternatif</span></a>
     </li>
-    
+
+
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('products') }}">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
+      <a class="nav-link" href="{{ route('kriteria') }}">
+        <i class="fas fa-mask"></i>
         <span>Kriteria</span></a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-link" href="/profile">
+      <a class="nav-link" href="{{ route('kriteria') }}">
+        <i class="fas fa-pills"></i>
+        <span>Sub Kriteria</span></a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="{{ route('products') }}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Products</span></a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="/profile">
+        <i class="fas fa-baby"></i>
         <span>Profile</span></a>
     </li>
     
