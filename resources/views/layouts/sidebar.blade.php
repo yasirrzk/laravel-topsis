@@ -32,7 +32,7 @@
     </li>
     
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('kriteria') }}">
+      <a class="nav-link" href="{{ route('subkriteria') }}">
         <i class="fas fa-pills"></i>
         <span>Sub Kriteria</span></a>
     </li>

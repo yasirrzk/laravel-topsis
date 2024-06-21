@@ -1,7 +1,7 @@
-@extends('welcome')
+@extends('navbar')
 
 @section('content')
-<div class="w-full h-screen">
+<div class="w-auto h-screen">
     <div class="flex flex-col lg:flex-row bg-white min-h-screen">
         <div class="flex items-center text-center lg:text-left px-8 md:px-12 lg:w-1/2 py-12">
             <div>

@@ -11,13 +11,8 @@ class Kriteria extends Model
 
     protected $fillable = [
         'code_kriteria',
-        'nama',
+        'kriteria',
         'weight',
         'type'
-      ];
-    
-      public function subKriterias()
-      {
-          return $this->hasMany(SubKriteria::class);
-      }
+    ];
 }

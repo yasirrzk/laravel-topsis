@@ -52,7 +52,7 @@
                         <label class="custom-control-label" for="customCheck">Remember
                           Me</label>
                       </div>
-                    </div>
+                    </div> 
                     <button type="submit" class="btn btn-primary btn-block btn-user">Login</button>
                   </form>
                   <hr>

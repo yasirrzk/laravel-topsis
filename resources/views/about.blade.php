@@ -1,4 +1,4 @@
-@extends('welcome')
+@extends('navbar')
 
 @section('title', 'Dashboard - Laravel Admin Panel With Login and Registration')
 

@@ -32,8 +32,8 @@
                     {{-- <td class="align-middle">{{ $loop->iteration }}</td> --}}
                     <td class="align-middle">{{ $rs->code_kriteria }}</td>
                     <td class="align-middle">{{ $rs->kriteria}}</td>
-                    <td class="align-middle">{{ $rs->weight}}</td>
-                    <td class="align-middle btn" style="background-color: #9DB2BF">{{ $rs->type}}</td>
+                    <td class="align-middle" >{{ $rs->weight}}</td>
+                    <td class="align-middle btn text-white" style="background-color: #059212">{{ $rs->type}}</td>
                     {{-- <td class="align-middle">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a href="#" type="button" class="btn btn-secondary">Detail</a>

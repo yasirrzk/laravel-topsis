@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SubKriteria;
+use App\Models\Kriteria;
 use Illuminate\Http\Request;
 
 class SubKriteriaController extends Controller
@@ -11,7 +13,9 @@ class SubKriteriaController extends Controller
      */
     public function index()
     {
-        //
+        $sub_kriteria = SubKriteria::with('kriteria')->orderByDesc('created_at')->get();
+        
+        return view('subkriteria.index', compact('sub_kriteria'));
     }
 
     /**

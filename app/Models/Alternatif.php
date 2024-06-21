@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Alternatif extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'code_alternatif',
         'nama',
         'alamat'
-      ];
+    ];
 }

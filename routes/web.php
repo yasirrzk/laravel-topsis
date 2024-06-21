@@ -4,6 +4,7 @@ use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SubKriteriaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,6 +69,12 @@ Route::middleware('auth')->group(function () {
         Route::get('', 'index')->name('kriteria');
         Route::get('create', 'create')->name('kriteria.create');
         Route::post('store', 'store')->name('kriteria.store');
+    });
+
+    Route::controller(SubKriteriaController::class)->prefix('subkriterias')->group(function () {
+        Route::get('', 'index')->name('subkriteria');
+        Route::get('create', 'create')->name('subkriteria.create');
+        Route::post('store', 'store')->name('subkriteria.store');
     });
     
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile'])->name('profile');
