@@ -19,4 +19,8 @@ class SubKriteria extends Model
     {
         return $this->belongsTo(Kriteria::class, 'id_kriteria');
     }
+
+    public function scores(){
+        return $this->hasMany(scores::class, 'subKriteria_id');
+    }
 }

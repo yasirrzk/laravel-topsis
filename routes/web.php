@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CalculateController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubKriteriaController;
@@ -76,7 +77,21 @@ Route::middleware('auth')->group(function () {
         Route::get('create', 'create')->name('subkriteria.create');
         Route::post('store', 'store')->name('subkriteria.store');
     });
-    
+
+    // Route::controller(CalculateController::class)->prefix('calculates')->group(function () {
+    //     Route::get('index', 'calculate')->name('calculate.index');
+    //     Route::get('create', 'create')->name('subkriteria.create');
+    //     Route::post('store', 'store')->name('subkriteria.store');
+    // });
+
+  
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile'])->name('profile');
 
 });
+
+Route::controller(CalculateController::class)->group(function () {
+    // Route untuk menghitung
+    Route::post('calculate', 'calculate')->name('calculate.process');
+    // Route untuk menampilkan hasil
+    Route::get('index', 'show')->name('calculate.index');
+}); 

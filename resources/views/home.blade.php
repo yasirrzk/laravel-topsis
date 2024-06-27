@@ -1,11 +1,11 @@
 @extends('navbar')
 
 @section('content')
-<div class="w-auto h-screen">
+<div class="w-auto h-screen py-12">
     <div class="flex flex-col lg:flex-row bg-white min-h-screen">
         <div class="flex items-center text-center lg:text-left px-8 md:px-12 lg:w-1/2 py-12">
             <div>
-                <span class="text-2xl font-semibold text-gray-800 md:text-4xl">⏰ Welcome to Hospital<span class="ml-2 text-blue-600">Decision Support System</span> ⏰</span>
+                <span class="text-2xl font-semibold text-gray-800 md:text-3xl">⏰ Welcome to Hospital<span class="ml-2 text-blue-600">Decision Support System</span> ⏰</span>
                 <h1 class="py-5 text-5xl font-semibold text-gray-800 md:text-6xl">Home<span class="ml-2 text-blue-600">Dashboard</span></h1>
                 <p class="mt-2 text-sm text-gray-500 md:text-lg">
                     <a href="https://fontgenerator.org/">Providing Data and</a> Analysis <strong>for better</strong> Decision Making.

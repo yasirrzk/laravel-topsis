@@ -1,7 +1,7 @@
 @extends('layouts.app')
-  
+
 @section('title', 'Create Product')
-  
+
 @section('contents')
     <h1 class="mb-0">Add Product</h1>
     <hr />
@@ -23,7 +23,7 @@
                 <textarea class="form-control" name="description" placeholder="Descriptoin"></textarea>
             </div>
         </div>
- 
+
         <div class="row">
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Submit</button>
