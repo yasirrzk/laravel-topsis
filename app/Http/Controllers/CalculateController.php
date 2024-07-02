@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alternatif;
 use App\Models\Kriteria;
-use App\Models\Scores;
+use App\Models\SubKriteria;
 use Illuminate\Http\Request;
 
 class CalculateController extends Controller
@@ -13,11 +13,11 @@ class CalculateController extends Controller
     {
         // Ambil data dari model atau sumber data lainnya
         $kriteria = Kriteria::all();
-        $alternatives = Alternatif::all();
-        $scores = Scores::all();
+        $alternatif = Alternatif::all();
+        $subkriteria = SubKriteria::all();
 
         // Validasi data
-        if ($kriteria->isEmpty() || $alternatives->isEmpty() || $scores->isEmpty()) {
+        if ($kriteria->isEmpty() || $alternatif->isEmpty() || $subkriteria->isEmpty()) {
             return redirect()->back()->with('error', 'Data tidak lengkap.');
         }
 
@@ -25,8 +25,8 @@ class CalculateController extends Controller
         $pembagi = [];
         foreach ($kriteria as $criterion) {
             $pembagi[$criterion->id] = 0;
-            foreach ($alternatives as $alternative) {
-                $value = $scores->where('subkriteria_id', $criterion->subkriteria->id)
+            foreach ($alternatif as $alternative) {
+                $value = $subkriteria->where('subkriteria_id', $criterion->id)
                                 ->where('alternatif_id', $alternative->id)
                                 ->first()->value;
                 $pembagi[$criterion->id] += pow($value, 2);
@@ -36,19 +36,20 @@ class CalculateController extends Controller
 
         // Normalisasi matriks
         $normalizedMatrix = [];
-        foreach ($alternatives as $alternative) {
+        foreach ($alternatif as $alternative) {
             foreach ($kriteria as $criterion) {
-                $value = $scores->where('subkriteria_id', $criterion->subkriteria->id)
+                $value = $subkriteria->where('subkriteria_id', $criterion->id)
                                 ->where('alternatif_id', $alternative->id)
                                 ->first()->value;
-                $normalizedMatrix[$alternative->id][$criterion->subkriteria->id] = $value / $pembagi[$criterion->id];
+                $normalizedMatrix[$alternative->id][$criterion->id] = $value / $pembagi[$criterion->id];
             }
         }
 
         // Pembobotan matriks normalisasi
-        foreach ($alternatives as $alternative) {
+        $weightedNormalizedMatrix = $normalizedMatrix;
+        foreach ($alternatif as $alternative) {
             foreach ($kriteria as $criterion) {
-                $normalizedMatrix[$alternative->id][$criterion->subkriteria->id] *= $criterion->nilai;
+                $weightedNormalizedMatrix[$alternative->id][$criterion->id] *= $criterion->weight;
             }
         }
 
@@ -56,24 +57,24 @@ class CalculateController extends Controller
         $positiveIdeal = [];
         $negativeIdeal = [];
         foreach ($kriteria as $criterion) {
-            $columnValues = array_column($normalizedMatrix, $criterion->subkriteria->id);
+            $columnValues = array_column(array_column($weightedNormalizedMatrix, $criterion->id), $criterion->id);
             if ($criterion->type == 'benefit') {
-                $positiveIdeal[$criterion->subkriteria->id] = max($columnValues);
-                $negativeIdeal[$criterion->subkriteria->id] = min($columnValues);
+                $positiveIdeal[$criterion->id] = max($columnValues);
+                $negativeIdeal[$criterion->id] = min($columnValues);
             } else {
-                $positiveIdeal[$criterion->subkriteria->id] = min($columnValues);
-                $negativeIdeal[$criterion->subkriteria->id] = max($columnValues);
+                $positiveIdeal[$criterion->id] = min($columnValues);
+                $negativeIdeal[$criterion->id] = max($columnValues);
             }
         }
 
         // Hitung jarak ke solusi ideal positif dan negatif
         $distances = [];
-        foreach ($normalizedMatrix as $alternative_id => $values) {
+        foreach ($weightedNormalizedMatrix as $alternative_id => $values) {
             $positiveDistance = 0;
             $negativeDistance = 0;
             foreach ($kriteria as $criterion) {
-                $positiveDistance += pow($values[$criterion->subkriteria->id] - $positiveIdeal[$criterion->subkriteria->id], 2);
-                $negativeDistance += pow($values[$criterion->subkriteria->id] - $negativeIdeal[$criterion->subkriteria->id], 2);
+                $positiveDistance += pow($values[$criterion->id] - $positiveIdeal[$criterion->id], 2);
+                $negativeDistance += pow($values[$criterion->id] - $negativeIdeal[$criterion->id], 2);
             }
             $distances[$alternative_id]['positive'] = sqrt($positiveDistance);
             $distances[$alternative_id]['negative'] = sqrt($negativeDistance);
@@ -89,23 +90,46 @@ class CalculateController extends Controller
         arsort($preferences);
         $alternatifrangking = [];
         foreach ($preferences as $alternative_id => $preference) {
-            $alternatifrangking[] = $alternatives->where('id', $alternative_id)->first();
+            $alternatifrangking[] = $alternatif->where('id', $alternative_id)->first();
         }
 
         // Simpan hasil perhitungan dalam session atau variabel
-        session(['alternatifrangking' => $alternatifrangking]);
+        session([
+            'alternatif' => $alternatif,
+            'kriteria' => $kriteria,
+            'subkriteria' => $subkriteria,
+            'pembagi' => $pembagi,
+            'normalizedMatrix' => $normalizedMatrix,
+            'weightedNormalizedMatrix' => $weightedNormalizedMatrix,
+            'positiveIdeal' => $positiveIdeal,
+            'negativeIdeal' => $negativeIdeal,
+            'preferences' => $preferences,
+            'alternatifrangking' => $alternatifrangking
+        ]);
 
         // Redirect ke halaman hasil
-        return redirect()->route('calculate.index');
+        return redirect()->route('calculate.show');
     }
 
     public function show()
     {
         // Ambil hasil perhitungan dari session
+        $alternatif = session('alternatif', []);
+        $kriteria = session('kriteria', []);
+        $scores = session('scores', []);
+        $pembagi = session('pembagi', []);
+        $normalizedMatrix = session('normalizedMatrix', []);
+        $weightedNormalizedMatrix = session('weightedNormalizedMatrix', []);
+        $positiveIdeal = session('positiveIdeal', []);
+        $negativeIdeal = session('negativeIdeal', []);
+        $preferences = session('preferences', []);
         $alternatifrangking = session('alternatifrangking', []);
 
         // Tampilkan halaman hasil
-        return view('calculate.index', compact('alternatifrangking'));
+        return view('calculate.index', compact(
+            'alternatif', 'kriteria', 'scores', 'pembagi', 'normalizedMatrix', 
+            'weightedNormalizedMatrix', 'positiveIdeal', 'negativeIdeal', 
+            'preferences', 'alternatifrangking'
+        ));
     }
 }
-

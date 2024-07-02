@@ -1,104 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Calculate')
+@section('title', 'pages / calculate')
 
-@section('content')
-<div class="container">
-    <h1>Hasil Perhitungan TOPSIS</h1>
-
-    @if(isset($normalizedMatrix) && isset($positiveIdeal) && isset($negativeIdeal) && isset($distances) && isset($preferences))
-        <h2>Normalisasi Matriks</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Alternatif</th>
-                    @foreach($kriteria as $criterion)
-                        @foreach($criterion->subkriteria as $subcriterion)
-                            <th>{{ $subcriterion->nama }}</th>
-                        @endforeach
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($alternatives as $alternative)
-                    <tr>
-                        <td>{{ $alternative->nama }}</td>
-                        @foreach($normalizedMatrix[$alternative->id] as $value)
-                            <td>{{ number_format($value, 4) }}</td>
-                        @endforeach
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <h2>Solusi Ideal Positif dan Negatif</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Subkriteria</th>
-                    <th>Ideal Positif</th>
-                    <th>Ideal Negatif</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($positiveIdeal as $subkriteria_id => $positiveValue)
-                    @php
-                        $subkriteria = \App\Models\SubKriteria::find($subkriteria_id);
-                    @endphp
-                    <tr>
-                        <td>{{ $subkriteria->nama }}</td>
-                        <td>{{ number_format($positiveValue, 4) }}</td>
-                        <td>{{ number_format($negativeIdeal[$subkriteria_id], 4) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <h2>Jarak ke Solusi Ideal Positif dan Negatif</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Alternatif</th>
-                    <th>Jarak ke Ideal Positif</th>
-                    <th>Jarak ke Ideal Negatif</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($distances as $alternative_id => $distance)
-                    @php
-                        $alternative = \App\Models\Alternatif::find($alternative_id);
-                    @endphp
-                    <tr>
-                        <td>{{ $alternative->nama }}</td>
-                        <td>{{ number_format($distance['positive'], 4) }}</td>
-                        <td>{{ number_format($distance['negative'], 4) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <h2>Nilai Preferensi</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Alternatif</th>
-                    <th>Nilai Preferensi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($preferences as $alternative_id => $preference)
-                    @php
-                        $alternative = \App\Models\Alternatif::find($alternative_id);
-                    @endphp
-                    <tr>
-                        <td>{{ $alternative->nama }}</td>
-                        <td>{{ number_format($preference, 4) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>Data tidak lengkap untuk melakukan perhitungan TOPSIS.</p>
-    @endif
+@section('contents')
+<div class="col-md-6">
+  <div class="panel panel-default">
+      <div class="panel-heading text-center">
+          Tabel Alternatif
+      </div>
+      <div class="panel-body">
+          <div class="row">
+              <div class="col-lg-12">
+                  <table class="table table-striped table-bordered table-hover">
+                      <thead>
+                          <tr>
+                              <th>ID Alternatif</th>
+                              <th>Nama Alternatif</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
+
 @endsection

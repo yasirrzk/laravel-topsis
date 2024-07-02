@@ -38,7 +38,7 @@
     </li>
     
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('calculate.index') }}">
+      <a class="nav-link" href="{{ route('calculate') }}">
         <i class="fas fa-pills"></i>
         <span>Calculate</span></a>
     </li>

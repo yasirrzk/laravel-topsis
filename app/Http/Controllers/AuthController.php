@@ -16,6 +16,34 @@ class AuthController extends Controller
         return view('auth/register');
     }
 
+    public function loginByGoogle(Request $request)
+{
+    $uid = $request->uid;
+    $name = $request->name;
+    $email = $request->email;
+
+    // Cari pengguna berdasarkan uid
+    $user = User::where('uid', $uid)->first();
+
+    // Jika pengguna tidak ditemukan, buat pengguna baru
+    if (!$user) {
+        $user = User::create([
+            'name' => $name,
+            'uid' => $uid,
+            'email' => $email,
+            'password' => bcrypt($uid)
+        ]);
+    }
+
+    // Pastikan $user tidak null sebelum mencoba login
+        Auth::loginUsingId($user->id);
+
+        return response()->json([
+            'status' => 'success',
+            'redirect' => route('dashboard')
+        ]);
+}
+
     public function registerSave(Request $request)
     {
         Validator::make($request->all(), [

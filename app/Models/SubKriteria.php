@@ -10,8 +10,6 @@ class SubKriteria extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_kriteria',
-        'nama',
         'nilai'
     ];
 
@@ -20,7 +18,9 @@ class SubKriteria extends Model
         return $this->belongsTo(Kriteria::class, 'id_kriteria');
     }
 
-    public function scores(){
-        return $this->hasMany(scores::class, 'subKriteria_id');
+    public function alternatif()
+    {
+        return $this->belongsTo(Alternatif::class, 'id_alternatif');
     }
+    
 }

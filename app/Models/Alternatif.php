@@ -14,8 +14,4 @@ class Alternatif extends Model
         'nama',
         'alamat'
     ];
-
-    public function scores(){
-        return $this->hasMany(scores::class, 'alternative_id');
-    }
 }

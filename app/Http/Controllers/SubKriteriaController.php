@@ -13,7 +13,7 @@ class SubKriteriaController extends Controller
      */
     public function index()
     {
-        $sub_kriteria = SubKriteria::with('kriteria')->orderByDesc('created_at')->get();
+        $sub_kriteria = SubKriteria::with('kriteria', 'alternatif')->orderByDesc('created_at')->get();
         
         return view('subkriteria.index', compact('sub_kriteria'));
     }

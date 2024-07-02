@@ -6,6 +6,8 @@ use App\Http\Controllers\CalculateController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubKriteriaController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +33,9 @@ Route::get('/about', function(){
     return view('about');
 })->name('about');
 
+// Route::post('/login/google', [AuthController::class, 'loginWithGoogle'])->name('login.google');
+
+
 // Route::get('/home', function(){
 //     return view('home');
 // })->name('home');
@@ -38,9 +43,9 @@ Route::get('/about', function(){
 Route::controller(AuthController::class)->group(function () {
     Route::get('register', 'register')->name('register');
     Route::post('register', 'registerSave')->name('register.save');
-
     Route::get('login', 'login')->name('login');
     Route::post('login', 'loginAction')->name('login.action');
+    Route::post('login/google', 'loginByGoogle')->name('login.google');
     Route::get('logout', 'logout')->middleware('auth')->name('logout');
 
 });
@@ -78,20 +83,30 @@ Route::middleware('auth')->group(function () {
         Route::post('store', 'store')->name('subkriteria.store');
     });
 
-    // Route::controller(CalculateController::class)->prefix('calculates')->group(function () {
-    //     Route::get('index', 'calculate')->name('calculate.index');
-    //     Route::get('create', 'create')->name('subkriteria.create');
-    //     Route::post('store', 'store')->name('subkriteria.store');
-    // });
+    Route::controller(CalculateController::class)->prefix('calculates')->group(function () {
+        Route::get('', 'show')->name('calculate');
+        // Route::get('create', 'create')->name('subkriteria.create');
+        // Route::post('store', 'store')->name('calculate.store');
+    });
 
+   
+    // Route::controller(CalculateController::class)->prefix('calculate')->group(function () {
+    //     // Route::get('', 'index')->name('subkriteria');
+    //     // Route::post('store', 'store')->name('subkriteria.store');
+    // });
   
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile'])->name('profile');
 
 });
 
-Route::controller(CalculateController::class)->group(function () {
-    // Route untuk menghitung
-    Route::post('calculate', 'calculate')->name('calculate.process');
-    // Route untuk menampilkan hasil
-    Route::get('index', 'show')->name('calculate.index');
-}); 
+// Route::controller(CalculateController::class)->group(function () {
+//     // Route untuk menghitung
+//     Route::post('calculate', 'calculate')->name('calculate.process');
+//     // Route untuk menampilkan hasil
+//     Route::get('calculate', 'show')->name('calculate');
+// }); 
+
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
