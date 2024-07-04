@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalculateController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SubKriteriaController;
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
@@ -75,36 +75,22 @@ Route::middleware('auth')->group(function () {
         Route::get('', 'index')->name('kriteria');
         Route::get('create', 'create')->name('kriteria.create');
         Route::post('store', 'store')->name('kriteria.store');
-    });
+    });   
 
-    Route::controller(SubKriteriaController::class)->prefix('subkriterias')->group(function () {
-        Route::get('', 'index')->name('subkriteria');
-        Route::get('create', 'create')->name('subkriteria.create');
-        Route::post('store', 'store')->name('subkriteria.store');
-    });
-
-    Route::controller(CalculateController::class)->prefix('calculates')->group(function () {
-        Route::get('', 'show')->name('calculate');
-        // Route::get('create', 'create')->name('subkriteria.create');
-        // Route::post('store', 'store')->name('calculate.store');
-    });
-
-   
-    // Route::controller(CalculateController::class)->prefix('calculate')->group(function () {
-    //     // Route::get('', 'index')->name('subkriteria');
-    //     // Route::post('store', 'store')->name('subkriteria.store');
-    // });
-  
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile'])->name('profile');
 
 });
 
-// Route::controller(CalculateController::class)->group(function () {
-//     // Route untuk menghitung
-//     Route::post('calculate', 'calculate')->name('calculate.process');
-//     // Route untuk menampilkan hasil
-//     Route::get('calculate', 'show')->name('calculate');
-// }); 
+Route::get('/penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
+Route::get('/penilaian/create', [PenilaianController::class, 'create'])->name('penilaian.create');
+Route::post('/penilaian', [PenilaianController::class, 'store'])->name('penilaian.store');
+Route::get('/penilaian/{id}/edit', [PenilaianController::class, 'getForms'])->name('penilaian.edit');
+Route::put('/penilaian/update', [PenilaianController::class, 'update'])->name('penilaian.update');
+Route::delete('/penilaian/{id}', [PenilaianController::class, 'destroy'])->name('penilaian.destroy');
+Route::get('/penilaian/calculate', [PenilaianController::class, 'calculate'])->name('penilaian.calculate');
+
+Route::get('/perhitungan/topsis', [CalculateController::class, 'topsis'])->name('calculate.topsis');
+
 
 Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');

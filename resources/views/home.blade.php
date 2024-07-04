@@ -1,9 +1,9 @@
 @extends('navbar')
 
 @section('content')
-<div class="w-auto h-screen py-12">
+<div class="w-full px-6 lg:px-0 py-12">
     <div class="flex flex-col lg:flex-row bg-white min-h-screen">
-        <div class="flex items-center text-center lg:text-left px-8 md:px-12 lg:w-1/2 py-12">
+        <div class="flex items-center justify-center lg:justify-start text-center lg:text-left px-8 md:px-12 lg:w-1/2 py-12">
             <div>
                 <span class="text-2xl font-semibold text-gray-800 md:text-3xl">⏰ Welcome to Hospital<span class="ml-2 text-blue-600">Decision Support System</span> ⏰</span>
                 <h1 class="py-5 text-5xl font-semibold text-gray-800 md:text-6xl">Home<span class="ml-2 text-blue-600">Dashboard</span></h1>
@@ -37,6 +37,4 @@
         </div>
     </div>
 </div>
-
-
 @endsection

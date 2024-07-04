@@ -77,7 +77,6 @@
         </div>
     </div>
 </section>
-
 <script>
     // Menambahkan efek hover zoom pada semua gambar dengan class "hover-zoom"
     document.querySelectorAll('.hover-zoom').forEach(function(img) {
@@ -91,3 +90,4 @@
     });
 </script>
 @endsection
+{{-- @extends('footer') --}}

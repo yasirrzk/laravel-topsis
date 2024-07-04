@@ -2,134 +2,84 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penilaian;
 use App\Models\Alternatif;
 use App\Models\Kriteria;
-use App\Models\SubKriteria;
-use Illuminate\Http\Request;
 
 class CalculateController extends Controller
 {
-    public function calculate()
+    public function topsis()
     {
-        // Ambil data dari model atau sumber data lainnya
-        $kriteria = Kriteria::all();
-        $alternatif = Alternatif::all();
-        $subkriteria = SubKriteria::all();
+        $alternatifs = Alternatif::all();
+        $kriterias = Kriteria::all();
+        $penilaians = Penilaian::all();
 
-        // Validasi data
-        if ($kriteria->isEmpty() || $alternatif->isEmpty() || $subkriteria->isEmpty()) {
-            return redirect()->back()->with('error', 'Data tidak lengkap.');
-        }
-
-        // Hitung pembagi
+        // Normalisasi Matriks
+        $matrixNormalisasi = [];
         $pembagi = [];
-        foreach ($kriteria as $criterion) {
-            $pembagi[$criterion->id] = 0;
-            foreach ($alternatif as $alternative) {
-                $value = $subkriteria->where('subkriteria_id', $criterion->id)
-                                ->where('alternatif_id', $alternative->id)
-                                ->first()->value;
-                $pembagi[$criterion->id] += pow($value, 2);
-            }
-            $pembagi[$criterion->id] = sqrt($pembagi[$criterion->id]);
-        }
 
-        // Normalisasi matriks
-        $normalizedMatrix = [];
-        foreach ($alternatif as $alternative) {
-            foreach ($kriteria as $criterion) {
-                $value = $subkriteria->where('subkriteria_id', $criterion->id)
-                                ->where('alternatif_id', $alternative->id)
-                                ->first()->value;
-                $normalizedMatrix[$alternative->id][$criterion->id] = $value / $pembagi[$criterion->id];
-            }
-        }
-
-        // Pembobotan matriks normalisasi
-        $weightedNormalizedMatrix = $normalizedMatrix;
-        foreach ($alternatif as $alternative) {
-            foreach ($kriteria as $criterion) {
-                $weightedNormalizedMatrix[$alternative->id][$criterion->id] *= $criterion->weight;
-            }
-        }
-
-        // Tentukan solusi ideal positif dan negatif
-        $positiveIdeal = [];
-        $negativeIdeal = [];
-        foreach ($kriteria as $criterion) {
-            $columnValues = array_column(array_column($weightedNormalizedMatrix, $criterion->id), $criterion->id);
-            if ($criterion->type == 'benefit') {
-                $positiveIdeal[$criterion->id] = max($columnValues);
-                $negativeIdeal[$criterion->id] = min($columnValues);
+        foreach ($kriterias as $kriteria) {
+            $nilaiKriteria = $penilaians->where('kriteria_id', $kriteria->id)->pluck('nilai')->toArray();
+            if (!empty($nilaiKriteria)) {
+                $pembagi[$kriteria->id] = sqrt(array_sum(array_map(function($nilai) {
+                    return pow($nilai, 2);
+                }, $nilaiKriteria)));
             } else {
-                $positiveIdeal[$criterion->id] = min($columnValues);
-                $negativeIdeal[$criterion->id] = max($columnValues);
+                $pembagi[$kriteria->id] = 1; // Default value to avoid division by zero
             }
         }
 
-        // Hitung jarak ke solusi ideal positif dan negatif
-        $distances = [];
-        foreach ($weightedNormalizedMatrix as $alternative_id => $values) {
-            $positiveDistance = 0;
-            $negativeDistance = 0;
-            foreach ($kriteria as $criterion) {
-                $positiveDistance += pow($values[$criterion->id] - $positiveIdeal[$criterion->id], 2);
-                $negativeDistance += pow($values[$criterion->id] - $negativeIdeal[$criterion->id], 2);
+        foreach ($penilaians as $penilaian) {
+            $matrixNormalisasi[$penilaian->alternatif_id][$penilaian->kriteria_id] = $penilaian->nilai / $pembagi[$penilaian->kriteria_id];
+        }
+
+        // Matriks Normalisasi Terbobot
+        $matrixTerbobot = [];
+        foreach ($matrixNormalisasi as $altId => $nilai) {
+            foreach ($nilai as $kriId => $nilaiNormalisasi) {
+                $matrixTerbobot[$altId][$kriId] = $nilaiNormalisasi * $kriterias->find($kriId)->weight;
             }
-            $distances[$alternative_id]['positive'] = sqrt($positiveDistance);
-            $distances[$alternative_id]['negative'] = sqrt($negativeDistance);
         }
 
-        // Hitung nilai preferensi untuk setiap alternatif
-        $preferences = [];
-        foreach ($distances as $alternative_id => $distance) {
-            $preferences[$alternative_id] = $distance['negative'] / ($distance['positive'] + $distance['negative']);
+        // Solusi Ideal Positif dan Negatif
+        $solusiIdealPositif = [];
+        $solusiIdealNegatif = [];
+        foreach ($kriterias as $kriteria) {
+            $values = array_column($matrixTerbobot, $kriteria->id);
+            $filteredValues = array_filter($values, function($val) {
+                return $val !== null;
+            });
+
+            if (!empty($filteredValues)) {
+                $solusiIdealPositif[$kriteria->id] = ($kriteria->type == 'Benefit') ? max($filteredValues) : min($filteredValues);
+                $solusiIdealNegatif[$kriteria->id] = ($kriteria->type == 'Benefit') ? min($filteredValues) : max($filteredValues);
+            } else {
+                $solusiIdealPositif[$kriteria->id] = 0; // Default value if no data
+                $solusiIdealNegatif[$kriteria->id] = 0; // Default value if no data
+            }
+        }
+        // Jarak Solusi Ideal Positif dan Negatif
+        $jarakPositif = [];
+        $jarakNegatif = [];
+        foreach ($alternatifs as $alternatif) {
+            $jarakPositif[$alternatif->id] = sqrt(array_sum(array_map(function($kriId) use ($matrixTerbobot, $solusiIdealPositif, $alternatif) {
+                return pow($matrixTerbobot[$alternatif->id][$kriId] - $solusiIdealPositif[$kriId], 2);
+            }, array_keys($solusiIdealPositif))));
+            
+            $jarakNegatif[$alternatif->id] = sqrt(array_sum(array_map(function($kriId) use ($matrixTerbobot, $solusiIdealNegatif, $alternatif) {
+                return pow($matrixTerbobot[$alternatif->id][$kriId] - $solusiIdealNegatif[$kriId], 2);
+            }, array_keys($solusiIdealNegatif))));
         }
 
-        // Lakukan peringkat alternatif
-        arsort($preferences);
-        $alternatifrangking = [];
-        foreach ($preferences as $alternative_id => $preference) {
-            $alternatifrangking[] = $alternatif->where('id', $alternative_id)->first();
+        // Nilai Preferensi
+        $nilaiPreferensi = [];
+        foreach ($alternatifs as $alternatif) {
+            $nilaiPreferensi[$alternatif->id] = $jarakNegatif[$alternatif->id] / ($jarakPositif[$alternatif->id] + $jarakNegatif[$alternatif->id]);
         }
 
-        // Simpan hasil perhitungan dalam session atau variabel
-        session([
-            'alternatif' => $alternatif,
-            'kriteria' => $kriteria,
-            'subkriteria' => $subkriteria,
-            'pembagi' => $pembagi,
-            'normalizedMatrix' => $normalizedMatrix,
-            'weightedNormalizedMatrix' => $weightedNormalizedMatrix,
-            'positiveIdeal' => $positiveIdeal,
-            'negativeIdeal' => $negativeIdeal,
-            'preferences' => $preferences,
-            'alternatifrangking' => $alternatifrangking
-        ]);
+        // Perankingan
+        arsort($nilaiPreferensi);
 
-        // Redirect ke halaman hasil
-        return redirect()->route('calculate.show');
-    }
-
-    public function show()
-    {
-        // Ambil hasil perhitungan dari session
-        $alternatif = session('alternatif', []);
-        $kriteria = session('kriteria', []);
-        $scores = session('scores', []);
-        $pembagi = session('pembagi', []);
-        $normalizedMatrix = session('normalizedMatrix', []);
-        $weightedNormalizedMatrix = session('weightedNormalizedMatrix', []);
-        $positiveIdeal = session('positiveIdeal', []);
-        $negativeIdeal = session('negativeIdeal', []);
-        $preferences = session('preferences', []);
-        $alternatifrangking = session('alternatifrangking', []);
-
-        // Tampilkan halaman hasil
-        return view('calculate.index', compact(
-            'alternatif', 'kriteria', 'scores', 'pembagi', 'normalizedMatrix', 
-            'weightedNormalizedMatrix', 'positiveIdeal', 'negativeIdeal', 
-            'preferences', 'alternatifrangking'
-        ));
+        return view('perhitungan.calculate', compact('alternatifs', 'kriterias', 'matrixNormalisasi', 'matrixTerbobot', 'solusiIdealPositif', 'solusiIdealNegatif', 'jarakPositif', 'jarakNegatif', 'nilaiPreferensi'));
     }
 }

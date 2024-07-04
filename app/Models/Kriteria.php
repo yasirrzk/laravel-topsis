@@ -13,6 +13,8 @@ class Kriteria extends Model
         'code_kriteria',
         'kriteria',
         'weight',
-        'type'
+        'type',
     ];
+
+    
 }

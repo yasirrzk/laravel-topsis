@@ -32,13 +32,13 @@
     </li>
     
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('subkriteria') }}">
+      <a class="nav-link" href="{{ route('penilaian.index') }}">
         <i class="fas fa-pills"></i>
-        <span>Sub Kriteria</span></a>
+        <span>penilaian</span></a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('calculate') }}">
+      <a class="nav-link" href="{{ route('calculate.topsis')}}">
         <i class="fas fa-pills"></i>
         <span>Calculate</span></a>
     </li>

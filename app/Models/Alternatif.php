@@ -14,4 +14,11 @@ class Alternatif extends Model
         'nama',
         'alamat'
     ];
+
+    // public function grades()
+    // {
+    //     return $this->hasMany(Grade::class, 'alternative_id');
+    // }
+
+    protected $table = 'alternatifs';
 }
