@@ -33,6 +33,10 @@ Route::get('/about', function(){
     return view('about');
 })->name('about');
 
+Route::get('/misal', function(){
+    return view('misal.index');
+})->name('misal');
+
 // Route::post('/login/google', [AuthController::class, 'loginWithGoogle'])->name('login.google');
 
 
