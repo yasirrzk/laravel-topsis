@@ -6,7 +6,7 @@
     
 <div class="d-flex align-items-center justify-content-between">
     <h1 class="mb-0">List Kriteria</h1>
-    {{-- <a href="{{ route('kriteria.create')}}" class="btn btn-primary">add Kriteria</a> --}}
+    <a href="{{ route('kriteria.create')}}" class="btn btn-primary">add Kriteria</a>
 </div>
 <hr />
 @if(Session::has('success'))

@@ -36,13 +36,6 @@
         <i class="fas fa-pills"></i>
         <span>penilaian</span></a>
     </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('misal') }}">
-        <i class="fas fa-pills"></i>
-        <span>misal</span></a>
-    </li>
-
     <li class="nav-item">
       <a class="nav-link" href="{{ route('calculate.topsis')}}">
         <i class="fas fa-pills"></i>

@@ -22,7 +22,7 @@ class KriteriaController extends Controller
      */
     public function create()
     {
-        //
+        return view('kriteria.create');
     }
 
     /**
@@ -30,7 +30,9 @@ class KriteriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Kriteria::create($request->all());
+
+        return redirect()->route('kriteria')->with('success', 'Product added succesfully');
     }
 
     /**
