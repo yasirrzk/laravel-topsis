@@ -66,6 +66,10 @@ class AlternatifController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $alternatif = Alternatif::findOrFail($id);
+  
+        $alternatif->delete();
+  
+        return redirect()->route('alternatif')->with('success', 'product deleted successfully');
     }
 }

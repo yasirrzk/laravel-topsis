@@ -33,7 +33,7 @@
                         <td class="align-middle">{{ $rs->alamat }}</td>
                         <td class="align-middle">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="#" type="button" class="btn text-white" style="background-color: rgb(92, 105, 188)">Detail</a>
+                                <a href="{{route('alternatif.store')}}" type="button" class="btn text-white" style="background-color: rgb(92, 105, 188)">Detail</a>
                                 <a href="#" type="button" class="btn text-white" style="background-color: mediumslateblue">Edit</a>
                                 <form action="#" method="POST" type="button" class="btn p-0" style="background-color: burlywood" onsubmit="return confirm('Delete?')">
                                     @csrf
