@@ -90,7 +90,7 @@
         </div>
         <div class="flex items-center">
           <p class="text-base font-normal leading-7 text-center text-grey-700">
-            2023 Motion Tailwind CSS Library. All rights reserved.</p>
+            2024 Yaseru Bin Laravel Bin Blade.</p>
         </div>
       </div>
     </div>

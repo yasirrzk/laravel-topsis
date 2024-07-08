@@ -56,7 +56,7 @@ class PenilaianController extends Controller
         $alternatif = Alternatif::find($id);
         $kriterias = Kriteria::all();
 
-        return view('penilaian.edit', compact('forms', 'alternatifs', 'kriterias'));
+        return view('penilaian.edit', compact('forms', 'alternatif', 'kriterias'));
     }
 
     public function update(Request $request)

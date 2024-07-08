@@ -14,7 +14,8 @@
     <script src="https://apis.google.com/js/api.js"></script>
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-primary"
+    style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-size: cover;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-12 col-md-9">
@@ -39,15 +40,21 @@
                                             </div>
                                         @endif
                                         <div class="form-group">
-                                            <input name="email" type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                                            <input name="email" type="email" class="form-control form-control-user"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
-                                            <input name="password" type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+                                            <input name="password" type="password"
+                                                class="form-control form-control-user" id="exampleInputPassword"
+                                                placeholder="Password">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
-                                                <input name="remember" type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
+                                                <input name="remember" type="checkbox" class="custom-control-input"
+                                                    id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">Remember
+                                                    Me</label>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-block btn-user">Login</button>
@@ -94,9 +101,9 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const btnGoogle = document.querySelector('#btnGoogle');
-            btnGoogle.addEventListener('click', function() {
+            btnGoogle.addEventListener('click', function () {
                 signInWithPopup(auth, provider)
                     .then((result) => {
                         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -115,12 +122,12 @@
                                 email: user.email,
                                 _token: tokenCSRF,
                             },
-                            success: function(data) {
+                            success: function (data) {
                                 console.log(data);
                                 window.location.href = data.redirect;
                                 // Handle success response
                             },
-                            error: function(err) {
+                            error: function (err) {
                                 console.log(err);
                                 // Handle error response
                             }

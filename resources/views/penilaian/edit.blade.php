@@ -18,7 +18,7 @@
             <form action="{{ route('penilaian.update') }}" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="hidden" name="alternative_id" value="{{ $alternatif->id }}">
+                <input type="hidden" name="alternatif_id" value="{{ $alternatif->id }}">
                 <div class="table-responsive">
                     <table class="table table-bordered" width="100%" cellspacing="0">
                         <thead>

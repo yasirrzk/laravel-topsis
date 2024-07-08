@@ -11,8 +11,7 @@ class Alternatif extends Model
     
     protected $fillable = [
         'code_alternatif',
-        'nama',
-        'alamat'
+        'nama'
     ];
     protected $table = 'alternatifs';
 }

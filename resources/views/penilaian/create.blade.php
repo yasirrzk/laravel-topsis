@@ -18,8 +18,8 @@
             <form action="{{ route('penilaian.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="alternative_id">Alternatif</label>
-                    <select name="alternative_id" class="form-control" required>
+                    <label for="alternatif_id">Alternatif</label>
+                    <select name="alternatif_id" class="form-control" required>
                         <option value="">Pilih Alternatif</option>
                         @foreach ($alternatifs as $alternatif)
                             <option value="{{ $alternatif->id }}">{{ $alternatif->code_alternatif }} - {{ $alternatif->nama}}</option>

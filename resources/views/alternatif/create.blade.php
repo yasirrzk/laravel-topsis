@@ -15,11 +15,11 @@
                 <input type="text" name="nama" class="form-control" placeholder="Nama">
             </div>
         </div>
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <div class="col-6">
                 <input type="text" name="alamat" class="form-control" placeholder="Alamat">
             </div>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
