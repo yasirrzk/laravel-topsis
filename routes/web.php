@@ -79,6 +79,8 @@ Route::middleware('auth')->group(function () {
         Route::get('', 'index')->name('kriteria');
         Route::get('create', 'create')->name('kriteria.create');
         Route::post('store', 'store')->name('kriteria.store');
+        Route::resource('kriteria', KriteriaController::class);
+
     });   
 
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile'])->name('profile');

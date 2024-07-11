@@ -3,7 +3,7 @@
 @section('title', 'Kriteria')
 
 @section('contents')
-    
+
 <div class="d-flex align-items-center justify-content-between">
     <h1 class="mb-0">List Kriteria</h1>
     <a href="{{ route('kriteria.create')}}" class="btn btn-primary">add Kriteria</a>
@@ -22,7 +22,7 @@
             <th>Nama</th>
             <th>bobot</th>
             <th>tipe</th>
-            {{-- <th>Action</th> --}}
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -34,17 +34,17 @@
                     <td class="align-middle">{{ $rs->kriteria}}</td>
                     <td class="align-middle" >{{ $rs->weight}}</td>
                     <td class="align-middle btn text-white" style="background-color: #059212">{{ $rs->type}}</td>
-                    {{-- <td class="align-middle">
+                    <td class="align-middle">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="#" type="button" class="btn btn-secondary">Detail</a>
-                            <a href="#" type="button" class="btn btn-warning">Edit</a>
-                            <form action="#" method="POST" type="button" class="btn btn-danger p-0" onsubmit="return confirm('Delete?')">
+                            <a href="#" type="button" class="btn text-white" style="background-color: rgb(92, 105, 188)">Detail</a>
+                            <a href="{{route('kriteria.edit', $rs->id)}}" type="button" class="btn text-white" style="background-color: mediumslateblue">Edit</a>
+                            <form action="{{route('kriteria.destroy', $rs->id )}}" method="POST" type="button" class="btn p-0" style="background-color: burlywood" onsubmit="return confirm('Delete?')">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger m-0">Delete</button>
                             </form>
                         </div>
-                    </td> --}}
+                    </td>
                 </tr>
             @endforeach
         @else
@@ -54,6 +54,5 @@
         @endif
     </tbody>
 </table>
-
 
 @endsection

@@ -48,7 +48,9 @@ class KriteriaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $kriteria = Kriteria::findOrFail($id);
+  
+        return view('kriteria.edit', compact('kriteria'));
     }
 
     /**
@@ -56,7 +58,11 @@ class KriteriaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $kriteria= Kriteria::findOrFail($id);
+  
+        $kriteria->update($request->all());
+  
+        return redirect()->route('kriteria')->with('success', 'kriteria updated successfully');
     }
 
     /**
@@ -66,4 +72,4 @@ class KriteriaController extends Controller
     {
         //
     }
-}
+}   
